@@ -1,0 +1,9 @@
+Building Teslacoin
+
+See doc/readme-qt.rst for instructions on building Teslacoin QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of Teslacoin.
+
+See doc/build-*.txt for instructions on building bitcoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of Teslacoin.
