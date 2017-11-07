@@ -313,7 +313,7 @@ public:
         }
     }
 
-    void AskFor(const CInv& inv)
+    void AskFor(const CInv& inv, bool fImmediateRetry = false)
     {
         // We're using mapAskFor as a priority queue,
         // the key is the earliest time the request can be sent
@@ -328,8 +328,11 @@ public:
         nNow = std::max(nNow, nLastTime);
         nLastTime = nNow;
 
-        // Each retry is 2 minutes after the last
-        nRequestTime = std::max(nRequestTime + 2 * 60 * 1000000, nNow);
+        // Each retry is 2 minutes after the last, except in case of initial download
+        if (fImmediateRetry)
+            nRequestTime = nNow;
+        else
+            nRequestTime = std::max(nRequestTime + 2 * 60 * 1000000, nNow);
         mapAskFor.insert(std::make_pair(nRequestTime, inv));
     }
 
@@ -691,3 +694,4 @@ inline void RelayMessage<>(const CInv& inv, const CDataStream& ss)
 
 
 #endif
+
