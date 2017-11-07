@@ -759,5 +759,8 @@ inline int Testuint256AdHoc(std::vector<std::string> vArg)
 }
 
 #endif
-
+//credits to bitbay
+inline uint256 uint256S(const std::string &x) { return uint256(x); }
 #endif
+
+
