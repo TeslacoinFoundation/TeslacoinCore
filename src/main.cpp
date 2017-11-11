@@ -630,7 +630,7 @@ int CTxIndex::GetDepthInMainChain() const
     CBlockIndex* pindex = (*mi).second;
     if (!pindex || !pindex->IsInMainChain())
         return 0;
-    return 1 + nBestHeight - pindex->nHeight;
+    return 1 + pindexBest->nHeight - pindex->nHeight;
 }
 
 // Return transaction in tx, and if it was found inside a block, its hash is placed in hashBlock
@@ -919,7 +919,7 @@ int GetNumBlocksOfPeers()
 
 bool IsInitialBlockDownload()
 {
-    if (pindexBest == NULL || nBestHeight < Checkpoints::GetTotalBlocksEstimate())
+    if (pindexBest == NULL || pindexBest->nHeight < pcheckpointMain->GetTotalBlocksEstimate())
         return true;
     static int64 nLastUpdate;
     static CBlockIndex* pindexLastBest;
@@ -1066,7 +1066,7 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
     }
 
     CBlockIndex* pcheckpoint = Checkpoints::GetLastSyncCheckpoint();
-    if (pcheckpoint && pblock->hashPrevBlock != hashBestChain && !Checkpoints::WantedByPendingSyncCheckpoint(hash))
+    if (pcheckpoint && pblock->hashPrevBlock != pindexBest->GetBlockHash() && !pcheckpointMain->WantedByPendingSyncCheckpoint(hash))
     {
         // Extra checks to prevent "fill up memory by spamming with bogus blocks"
         int64 deltaTime = pblock->GetBlockTime() - pcheckpoint->nTime;
@@ -1303,6 +1303,7 @@ bool LoadBlockIndex(bool fAllowNew)
         unsigned int nBlockPos;
         if (!block.WriteToDisk(nFile, nBlockPos))
             return error("LoadBlockIndex() : writing genesis block to disk failed");
+
         if (!block.AddToBlockIndex(nFile, nBlockPos))
             return error("LoadBlockIndex() : genesis block not accepted");
 

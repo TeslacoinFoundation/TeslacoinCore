@@ -469,7 +469,7 @@ bool CheckWork(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     // Found a solution
     {
         LOCK(cs_main);
-        if (pblock->hashPrevBlock != hashBestChain)
+        if (pblock->hashPrevBlock != pindexBest->GetBlockHash())
             return error("TeslaMiner : generated block is stale");
 
         // Remove key from key pool

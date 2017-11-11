@@ -50,7 +50,10 @@ namespace Checkpoints
         MapCheckpoints& checkpoints = (fTestNet ? mapCheckpointsTestnet : mapCheckpoints);
 
         MapCheckpoints::const_iterator i = checkpoints.find(nHeight);
-        if (i == checkpoints.end()) return true;
+        if (i == checkpoints.end())
+        {
+            return true;
+        }
         return hash == i->second;
     }
 
@@ -74,7 +77,7 @@ namespace Checkpoints
         }
         return NULL;
     }
-
+F
     // ppcoin: synchronized checkpoint (centrally broadcasted)
     uint256 hashSyncCheckpoint = 0;
     uint256 hashPendingCheckpoint = 0;
@@ -360,7 +363,7 @@ namespace Checkpoints
         // sync-checkpoint should always be accepted block
         assert(mapBlockIndex.count(hashSyncCheckpoint));
         const CBlockIndex* pindexSync = mapBlockIndex[hashSyncCheckpoint];
-        return (nBestHeight >= pindexSync->nHeight + nCoinbaseMaturity ||
+        return (pindexBest->nHeight >= pindexSync->nHeight + nCoinbaseMaturity ||
                 pindexSync->GetBlockTime() + nStakeMinAge < GetAdjustedTime());
     }
 

@@ -165,14 +165,14 @@ void TransactionRecord::updateStatus(const CWalletTx &wtx)
         idx);
     status.confirmed = wtx.IsConfirmed();
     status.depth = wtx.GetDepthInMainChain();
-    status.cur_num_blocks = nBestHeight;
+    status.cur_num_blocks = pindexBest->nHeight;
 
     if (!wtx.IsFinal())
     {
         if (wtx.nLockTime < LOCKTIME_THRESHOLD)
         {
             status.status = TransactionStatus::OpenUntilBlock;
-            status.open_for = nBestHeight - wtx.nLockTime;
+            status.open_for = wtx.nLockTime - pindexBest->nHeight;
         }
         else
         {
@@ -226,7 +226,7 @@ void TransactionRecord::updateStatus(const CWalletTx &wtx)
 
 bool TransactionRecord::statusUpdateNeeded()
 {
-    return status.cur_num_blocks != nBestHeight;
+    return status.cur_num_blocks != pindexBest->nHeight;
 }
 
 std::string TransactionRecord::getTxID()
