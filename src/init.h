@@ -8,7 +8,6 @@
 #include "wallet.h"
 
 extern CWallet* pwalletMain;
-extern ServiceFlags nLocalServices;
 
 void StartShutdown();
 void Shutdown(void* parg);
