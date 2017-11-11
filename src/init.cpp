@@ -26,6 +26,7 @@ using namespace std;
 using namespace boost;
 
 CWallet* pwalletMain;
+ServiceFlags nLocalServices = NODE_NETWORK;
 CClientUIInterface uiInterface;
 
 //////////////////////////////////////////////////////////////////////////////
