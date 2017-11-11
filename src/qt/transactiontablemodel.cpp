@@ -249,9 +249,9 @@ void TransactionTableModel::updateTransaction(const QString &hash, int status)
 
 void TransactionTableModel::updateConfirmations()
 {
-    if(pindexBest->nHeight != cachedNumBlocks)
+    if(nBestHeight != cachedNumBlocks)
     {
-        cachedNumBlocks = pindexBest->nHeight;
+        cachedNumBlocks = nBestHeight;
         // Blocks came in since last poll.
         // Invalidate status (number of confirmations) and (possibly) description
         //  for all rows. Qt is smart enough to only actually request the data for the
