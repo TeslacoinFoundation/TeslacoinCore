@@ -789,7 +789,7 @@ bool AppInit2()
         CWalletDB walletdb("wallet.dat");
         CBlockLocator locator;
         if (walletdb.ReadBestBlock(locator))
-            pindexRescan = pindexBest;
+            pindexRescan = locator.GetBlockIndex();
     }
     if (pindexBest != pindexRescan && pindexBest && pindexRescan && pindexBest->nHeight > pindexRescan->nHeight)
     {
