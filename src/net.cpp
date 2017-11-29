@@ -1156,21 +1156,11 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"node1.com", "electrum4.cryptolife.net"},
-	{"node2.com", "tesla-coin.com"},
-    {"node3.com", "node1.tesla-coin.com"},
-    {"node4.com", "node2.tesla-coin.com"},
-	/////////////////////////////////////////////////
-    {"tesla.coin1", "tes1.altcoinsfoundation.com"},
-    {"tesla.coin2", "seed1.teslacoinfoundation.org"},
-    {"tesla.coin3", "seed1.teslachain.info"},
-    {"tesla.coin4", "seed2.teslachain.info"},
-	{"tesla.coin5", "108.49.185.3"},
-    {"tesla.coin6", "115.28.38.190"},
-    {"tesla.coin7", "5.189.187.91"},
-    {"tesla.coin8", "74.65.200.29"},
-    {"tesla.coin9", "81.245.187.75"},
-    {"teslacoinv3.3-seed", "94.177.203.132"},
+    {"nodo1-tesv34", "94.177.247.97"},
+    {"nodo2-tesv34", "89.40.119.28"},
+    {"nodo3-tesv34", "94.177.237.24"},
+    {"nodo4-tesv34", "86.105.48.207"},
+    {"nodo5-tesv34", "185.35.67.61"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
