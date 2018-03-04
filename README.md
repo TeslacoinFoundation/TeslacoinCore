@@ -1,14 +1,19 @@
 # Teslacoin
 
-A hybrid Proof of Stake / Proof of work alternative Crypto Currency
+Maximum coins: 100,000,000 TES
 
-POW: 172 coins per block reducing by ~18.56% every ~30 days
+PoS Interest:
+7% annually during the first 1,000,000 blocks (estimated 1 year)
+6% annually during the next 1,000,000 blocks (estimated 1 year)
+5% annually during the next 1,000,000 blocks (estimated 1 year)
+4% annually during the next 1,000,000 blocks (estimated 1 year)
+3% annually until new maximum coins.
+     
+0.5% interest will be destined for funding the TeslaStarter platform expenses, committee members
+salaries and to crowdfund projects.
 
-POS: 12% annually
-     
-    Min age: 24 hours
-     
-    Max age: 90 days
+Min age: 24 hours  
+Max age: 90 days
 
 30 second blocks
 
