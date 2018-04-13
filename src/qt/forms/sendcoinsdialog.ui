@@ -84,7 +84,7 @@
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">font-weight:bold;</string>
+             <string notr="true">font-weight:bold;color:#ffffff</string>
             </property>
             <property name="text">
              <string>Coin Control Features</string>
@@ -115,6 +115,9 @@
            <widget class="QLabel" name="labelCoinControlAutomaticallySelected">
             <property name="text">
              <string>automatically selected</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color:#ffffff</string>
             </property>
             <property name="margin">
              <number>5</number>
@@ -557,6 +560,9 @@
            <widget class="QCheckBox" name="checkBoxCoinControlChange">
             <property name="text">
              <string>custom change address</string>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color:#ffffff</string>
             </property>
            </widget>
           </item>
