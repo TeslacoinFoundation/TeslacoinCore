@@ -130,6 +130,9 @@
          <property name="text">
           <string>Inputs:</string>
          </property>
+         <property name="styleSheet">
+          <string notr="true">color:#ffffff;</string>
+         </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
@@ -140,6 +143,9 @@
          <property name="text">
           <string>0000 KH/s</string>
          </property>
+        	<property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="14" column="0">
@@ -147,6 +153,9 @@
          <property name="text">
           <string>Value out:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="13" column="0">
@@ -154,6 +163,9 @@
          <property name="text">
           <string>Transaction ID:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="9" column="1">
@@ -161,6 +173,9 @@
          <property name="text">
           <string>0.00</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="13" column="1">
@@ -168,6 +183,9 @@
          <property name="text">
           <string>000</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="17" column="1">
@@ -175,6 +193,9 @@
          <property name="text">
           <string/>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
@@ -185,6 +206,9 @@
          <property name="text">
           <string/>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="9" column="0">
@@ -192,6 +216,9 @@
          <property name="text">
           <string>Block Difficulty:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="1" column="0">
@@ -212,6 +239,9 @@
          <property name="text">
           <string>Block Height:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="8" column="1">
@@ -219,6 +249,9 @@
          <property name="text">
           <string>0</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="1" column="1">
@@ -233,6 +266,9 @@
          <property name="text">
           <string>Block Merkle:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="4" column="0">
@@ -240,6 +276,9 @@
          <property name="text">
           <string>Block Hash:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="15" column="1">
@@ -247,6 +286,9 @@
          <property name="text">
           <string/>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="10" column="0">
@@ -254,6 +296,9 @@
          <property name="text">
           <string>Block Hashrate:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="3" column="1">
@@ -261,6 +306,9 @@
          <property name="text">
           <string>0</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="15" column="0">
@@ -268,6 +316,9 @@
          <property name="text">
           <string>Fees:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="7" column="0">
@@ -275,6 +326,9 @@
          <property name="text">
           <string>Block nBits:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="7" column="1">
@@ -282,6 +336,9 @@
          <property name="text">
           <string>0</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="5" column="1">
@@ -295,6 +352,9 @@
          <property name="text">
           <string>0x0</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="16" column="0">
@@ -305,6 +365,9 @@
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="16" column="1">
@@ -315,6 +378,9 @@
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="6" column="0">
@@ -322,6 +388,9 @@
          <property name="text">
           <string>Block nNonce:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="6" column="1">
@@ -329,6 +398,9 @@
          <property name="text">
           <string>0</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="8" column="0">
@@ -336,6 +408,9 @@
          <property name="text">
           <string>Block Timestamp:</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="4" column="1">
@@ -358,6 +433,9 @@
          <property name="text">
           <string>0x0</string>
          </property>
+         <property name="styleSheet">
+       	  <string notr="true">color:#ffffff;</string>
+	        </property>
         </widget>
        </item>
        <item row="12" column="0">
