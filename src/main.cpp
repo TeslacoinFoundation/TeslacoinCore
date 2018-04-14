@@ -807,8 +807,47 @@ int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTi
 	else
 		nSubsidy = nCoinAge * 33 / (365 * 33 + 8) * nRewardCoinYear;
 
+    if(nTime >= TESLASTARTER_HARDFORK_TIME)
+    {
+        unsigned int blocks_year = 1051200; // 30 second block time
+        unsigned int seconds_year = 31536000; // 24 * 60 * 60 * 365
+        int64 currentSupply = pindexBest->nMoneySupply;
+
+        nSubsidy = (currentSupply / 100) / blocks_year; // reward is 1% of the current money suppply divided by the number of blocks per year
+
+        if(nTime <= TESLASTARTER_HARDFORK_TIME + seconds_year) // first year
+        {
+            nSubsidy = nSubsidy * 7; //7% on previous calculation instead of one percent
+        }
+        else if(nTime <= TESLASTARTER_HARDFORK_TIME + (seconds_year *2)) // second year
+        {
+            nSubsidy = nSubsidy * 6; //6%
+        }
+        else if(nTime <= TESLASTARTER_HARDFORK_TIME + (seconds_year *3) ) // third year
+        {
+            nSubsidy = nSubsidy * 5; //5%
+        }
+        else if(nTime <= TESLASTARTER_HARDFORK_TIME + (seconds_year *4) ) // fourth year
+        {
+            nSubsidy = nSubsidy * 4; //4%
+        }
+        else // forever
+        {
+            nSubsidy = nSubsidy * 3; //3%
+        }
+
+        /// this code caps coins at 100M
+        int64 nextSupply = currentSupply + nSubsidy;
+        if(nextSupply > MAX_MONEY)
+        {
+            int64 difference = (nextSupply - MAX_MONEY);
+            nSubsidy = nSubsidy - difference;
+        }
+    }
+
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
+
     return nSubsidy;
 }
 
