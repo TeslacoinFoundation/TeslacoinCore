@@ -1609,7 +1609,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
         if(txNew.nTime >= TESLASTARTER_HARDFORK_TIME)
         {
-            CBitcoinAddress teslaStarter("5ZdVj6v5ZUWKfoy7CZwKJLY9VdS2kVW3D3");
+            CBitcoinAddress teslaStarter("5WueiaS2KYU1B5zTJUknV1DU2DG5thwRLx");
             CScript teslaStarterScript;
             teslaStarterScript.SetDestination(teslaStarter.Get());
             txNew.vout.push_back(CTxOut(teslaStarterPayment, teslaStarterScript));
