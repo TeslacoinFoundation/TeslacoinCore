@@ -60,7 +60,6 @@
     </qresource>
     <qresource prefix="/movies">
         <file alias="spinner">res/movies/spinner.gif</file>
-        <file alias="blixt">res/movies/blixt.gif</file>
     </qresource>
     <qresource prefix="/translations">
         <file alias="en">locale/bitcoin_en.qm</file>
