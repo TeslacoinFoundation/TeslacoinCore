@@ -52,7 +52,7 @@ static const unsigned int REWARD_SWITCH_TIME = 1369432800; // 25 May 2013 00:00:
 
 static const unsigned int ROUND_SWITCH_TIME = 1375747200; // 6 August 2013 00:00:00
 
-static const unsigned int TESLASTARTER_HARDFORK_TIME = 1525478400; // 5 May 2018 00:00:00
+static const unsigned int TESLASTARTER_HARDFORK_TIME = 1527206400; // 25 May 2018 00:00:00
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
