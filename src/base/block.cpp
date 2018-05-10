@@ -57,7 +57,7 @@ uint256 CBlock::GetHash() const
     uint256 thash;
     void * scratchbuff = scrypt_buffer_alloc();
 
-    scrypt_hash(CVOIDBEGIN(nVersion), sizeof(block_header), UINTBEGIN(thash), scratchbuff);
+    scrypt_hash(((const void*)&(nVersion)), sizeof(block_header), ((uint32_t*)&(thash)), scratchbuff);
 
     scrypt_buffer_free(scratchbuff);
 

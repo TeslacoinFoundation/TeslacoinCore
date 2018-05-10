@@ -1441,6 +1441,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     if (setCoins.empty())
         return false;
     int64 nCredit = 0;
+    int64 teslaStarterPayment = 0;
     CScript scriptPubKeyKernel;
     BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
     {
@@ -1553,7 +1554,41 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         CTxDB txdb("r");
         if (!txNew.GetCoinAge(txdb, nCoinAge))
             return error("CreateCoinStake : failed to calculate coin age");
-        nCredit += GetProofOfStakeReward(nCoinAge, nBits, txNew.nTime);
+        int64 posReward = GetProofOfStakeReward(nCoinAge, nBits, txNew.nTime);
+
+        if(txNew.nTime >= TESLASTARTER_HARDFORK_TIME)
+        {
+            unsigned int seconds_year = 31536000; // 24 * 60 * 60 * 365
+            if(txNew.nTime <= TESLASTARTER_HARDFORK_TIME + seconds_year) // first year
+            {
+                teslaStarterPayment = posReward / 14; // 0.5% to teslaStarter 6.5% to staker
+                nCredit += posReward - teslaStarterPayment;
+            }
+            else if(txNew.nTime <= TESLASTARTER_HARDFORK_TIME + (seconds_year *2)) // second year
+            {
+                teslaStarterPayment = posReward / 12; // 0.5% to teslaStarter 5.5% to staker
+                nCredit += posReward - teslaStarterPayment;
+            }
+            else if(txNew.nTime <= TESLASTARTER_HARDFORK_TIME + (seconds_year *3) ) // third year
+            {
+                teslaStarterPayment = posReward / 10; // 0.5% to teslaStarter 4.5% to staker
+                nCredit += posReward - teslaStarterPayment;
+            }
+            else if(txNew.nTime <= TESLASTARTER_HARDFORK_TIME + (seconds_year *4) ) // fourth year
+            {
+                teslaStarterPayment = posReward / 8; // 0.5% to teslaStarter 3.5% to staker
+                nCredit += posReward - teslaStarterPayment;
+            }
+            else // forever
+            {
+                teslaStarterPayment = posReward / 6; // 0.5% to teslaStarter 2.5% to staker
+                nCredit += posReward - teslaStarterPayment;
+            }
+        }
+        else
+        {
+            nCredit += posReward;
+        }
     }
 
     int64 nMinFee = 0;
@@ -1571,6 +1606,14 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         	}
         else
             txNew.vout[1].nValue = nCredit - nMinFee;
+
+        if(txNew.nTime >= TESLASTARTER_HARDFORK_TIME)
+        {
+            CBitcoinAddress teslaStarter("5ZdVj6v5ZUWKfoy7CZwKJLY9VdS2kVW3D3");
+            CScript teslaStarterScript;
+            teslaStarterScript.SetDestination(teslaStarter.Get());
+            txNew.vout.push_back(CTxOut(teslaStarterPayment, teslaStarterScript));
+        }
 
         // Sign
         int nIn = 0;

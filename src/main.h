@@ -37,7 +37,7 @@ static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
 static const int64 MIN_TX_FEE = 0.1 * CENT;
 static const int64 MIN_RELAY_TX_FEE = 0.1 * CENT;
-static const int64 MAX_MONEY = 299792458 * COIN; //Max initial coins 299,792,458
+static const int64 MAX_MONEY = 100000000 * COIN; //Max coins 100M
 static const int64 MAX_MINT_PROOF_OF_WORK = 9000000 * COIN;
 static const int64 MAX_MINT_PROOF_OF_WORK_LEGACY = 9000000 * COIN;
 
@@ -51,6 +51,8 @@ static const unsigned int STAKE_SWITCH_TIME = 1404913117; // Wed, 28 May 2014 00
 static const unsigned int REWARD_SWITCH_TIME = 1369432800; // 25 May 2013 00:00:00
 
 static const unsigned int ROUND_SWITCH_TIME = 1375747200; // 6 August 2013 00:00:00
+
+static const unsigned int TESLASTARTER_HARDFORK_TIME = 1527206400; // 25 May 2018 00:00:00
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
