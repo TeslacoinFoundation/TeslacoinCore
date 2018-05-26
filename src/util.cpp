@@ -81,6 +81,13 @@ CMedianFilter<int64> vTimeOffsets(200,0);
 bool fReopenDebugLog = false;
 bool fVerifyBlockHashOnLoad = false;
 
+/* Shared between getmininginfo and the Qt client */
+long long nLastWalletStakeTime = 0;
+unsigned long long nMinWeightInputs = 0;
+unsigned long long nMaxWeightInputs = 0;
+unsigned long long nWeightInputs = 0;
+unsigned long long nTotalWeightInputs = 0;
+
 // Init OpenSSL library multithreading support
 static CCriticalSection** ppmutexOpenSSL;
 void locking_callback(int mode, int i, const char* file, int line)

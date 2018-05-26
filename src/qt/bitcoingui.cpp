@@ -687,59 +687,74 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
 
 void BitcoinGUI::updateMining()
 {
-   if(!walletModel)
-      return;
+   QString tooltip;
+   bool fStakeIcon = true;
+   
+   if(!walletModel) {
+      fStakeIcon = false;
+	  tooltip = tr("Staking disabled");
 
-    labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+    } else {
+	
+		if(!clientModel->getNumConnections()) {
+			fStakeIcon = false;
+			tooltip = tr("Wallet is offline, staking paused");
 
-    if (!clientModel->getNumConnections())
-    {
-        labelStakingIcon->setToolTip(tr("Wallet is offline"));
-        return;
-    }
+		} else if(clientModel->inInitialBlockDownload() || clientModel->getNumBlocksOfPeers() > clientModel->getNumBlocks()) {
+			fStakeIcon = false;
+			tooltip = tr("Wallet is synchronising, staking paused");
 
-    if (walletModel->getEncryptionStatus() == WalletModel::Locked)
-    {
-        labelStakingIcon->setToolTip(tr("Wallet is locked"));
-        return;
-    }
+		} else if(walletModel->getEncryptionStatus() == WalletModel::Locked) {
+			fStakeIcon = false;
+			tooltip = tr("Wallet is locked, staking paused");
 
-    if (clientModel->inInitialBlockDownload() || clientModel->getNumBlocksOfPeers() > clientModel->getNumBlocks())
-    {
-        labelStakingIcon->setToolTip(tr("Blockchain download is in progress"));
-        return;
-    }
+		} else {
+			/* Caches the results for 10 minutes */
+			if((GetTime() - 600) > nLastWalletStakeTime) {
+				walletModel->getStakeWeight(nMinWeightInputs, nMaxWeightInputs, nTotalWeightInputs);
+				nLastWalletStakeTime = GetTime();
+			} else {
+				if (nTotalWeightInputs > 0)
+				{
 
-    float nKernelsRate = 0, nCoinDaysRate = 0;
-    walletModel->getStakeStats(nKernelsRate, nCoinDaysRate);
+					double dNetworkWeight = clientModel->getPoSKernelPS();
+					/*
+					double dDifficulty = clientModel->getDifficulty(true);
+					QString msg;
 
-    if (nKernelsRate > 0)
-    {
-        labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
+					int nApproxTime = 4294967297 * dDifficulty / nTotalWeight;
 
-        uint64_t nNetworkWeight = clientModel->getPoSKernelPS();
-/*
-        double dDifficulty = clientModel->getDifficulty(true);
-        QString msg;
+					if (nApproxTime < 60)
+						msg = tr("%n second(s)", "", nApproxTime);
+					else if (nApproxTime < 60*60)
+						msg = tr("%n minute(s)", "", nApproxTime / 60);
+					else if (nApproxTime < 24*60*60)
+						msg = tr("%n hour(s)", "", nApproxTime / 3600);
+					else
+						msg = tr("%n day(s)", "", nApproxTime / 86400);
 
-        int nApproxTime = 4294967297 * dDifficulty / nTotalWeight;
+					labelMiningIcon->setToolTip(tr("Stake miner is active\nYour current stake weight is %1\nNetwork weight is %2\nAverage block generation time is %3").arg(nTotalWeight).arg(dNetworkWeight).arg(msg));
+					*/
 
-        if (nApproxTime < 60)
-            msg = tr("%n second(s)", "", nApproxTime);
-        else if (nApproxTime < 60*60)
-            msg = tr("%n minute(s)", "", nApproxTime / 60);
-        else if (nApproxTime < 24*60*60)
-            msg = tr("%n hour(s)", "", nApproxTime / 3600);
-        else
-            msg = tr("%n day(s)", "", nApproxTime / 86400);
-
-        labelStakingIcon->setToolTip(tr("Stake miner is active\nYour current stake weight is %1\nNetwork weight is %2\nAverage block generation time is %3").arg(nTotalWeight).arg(dNetworkWeight).arg(msg));
-*/
-
-        labelStakingIcon->setToolTip(QString("<nobr>")+tr("Stake miner is active<br>Kernel rate is %1 k/s<br>CD rate is %2 CD/s<br>Network weight is %3").arg(nKernelsRate).arg(nCoinDaysRate).arg(nNetworkWeight)+QString("<\nobr>"));
-    }
+					fStakeIcon = true;
+					tooltip = tr("Your current stake weight is %1\nNetwork weight is %2").arg(nTotalWeightInputs).arg(dNetworkWeight);
+				} else {
+					fStakeIcon = false;
+					tooltip = tr("No suitable inputs were found, staking paused");
+				}
+			}
+		}
+	}
+	
+    /* Don't wrap words */
+	tooltip = QString("<nobr>") + tooltip + QString("</nobr>");
+	
+	labelMiningIcon->setToolTip(tooltip);
+	
+	if(fStakeIcon)
+      labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));
     else
-        labelStakingIcon->setToolTip(tr("No suitable inputs were found"));
+      labelStakingIcon->setPixmap(QIcon(":/icons/staking_off").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));	
 }
 
 void BitcoinGUI::error(const QString &title, const QString &message, bool modal)

@@ -70,6 +70,12 @@ Value getmininginfo(const Array& params, bool fHelp)
             "getmininginfo\n"
             "Returns an object containing mining-related information.");
 
+    /* Caches the results for 10 minutes */
+    if((GetTime() - 600) > nLastWalletStakeTime) {
+        pwalletMain->GetStakeWeight(*pwalletMain, nMinWeightInputs, nMaxWeightInputs, nWeightInputs);
+        nLastWalletStakeTime = GetTime();
+    }
+
     Object obj;
     obj.push_back(Pair("blocks",        (int)nBestHeight));
     obj.push_back(Pair("currentblocksize",(uint64_t)nLastBlockSize));
@@ -77,6 +83,9 @@ Value getmininginfo(const Array& params, bool fHelp)
     obj.push_back(Pair("difficulty",    (double)GetDifficulty()));
     obj.push_back(Pair("errors",        GetWarnings("statusbar")));
     obj.push_back(Pair("generate",      GetBoolArg("-gen")));
+    obj.push_back(Pair("minimum",    (boost::uint64_t)nMinWeightInputs));
+    obj.push_back(Pair("maximum",    (boost::uint64_t)nMaxWeightInputs));
+    obj.push_back(Pair("combined", (boost::uint64_t)nWeightInputs));
     obj.push_back(Pair("genproclimit",  (int)GetArg("-genproclimit", -1)));
     obj.push_back(Pair("hashespersec",  gethashespersec(params, false)));
     obj.push_back(Pair("pooledtx",      (uint64_t)mempool.size()));
