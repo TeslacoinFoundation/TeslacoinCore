@@ -312,6 +312,11 @@ void WalletModel::getStakeStats(float &nKernelsRate, float &nCoinDaysRate)
     wallet->GetStakeStats(nKernelsRate, nCoinDaysRate);
 }
 
+void WalletModel::getStakeWeight(uint64& nMinWeight, uint64& nMaxWeight, uint64& nWeight)
+{
+    wallet->GetStakeWeight(*wallet, nMinWeight, nMaxWeight, nWeight);
+}
+
 void WalletModel::getStakeWeightFromValue(const int64_t& nTime, const int64_t& nValue, uint64_t& nWeight)
 {
     wallet->GetStakeWeightFromValue(nTime, nValue, nWeight);

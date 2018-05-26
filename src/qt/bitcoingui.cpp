@@ -749,7 +749,7 @@ void BitcoinGUI::updateMining()
     /* Don't wrap words */
 	tooltip = QString("<nobr>") + tooltip + QString("</nobr>");
 	
-	labelMiningIcon->setToolTip(tooltip);
+	labelStakingIcon->setToolTip(tooltip);
 	
 	if(fStakeIcon)
       labelStakingIcon->setPixmap(QIcon(":/icons/staking_on").pixmap(STATUSBAR_ICONSIZE,STATUSBAR_ICONSIZE));

@@ -110,6 +110,9 @@ extern CBlockIndex* pblockindexFBBHLast;
 
 // Settings
 extern int64 nTransactionFee;
+extern int64 nMinimumInputValue;
+
+extern bool fEnforceCanonical;
 
 // Minimum disk space required - used in CheckDiskSpace()
 static const uint64 nMinDiskSpace = 52428800;
