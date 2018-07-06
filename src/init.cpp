@@ -713,7 +713,7 @@ bool AppInit2()
         CWallet *tempWallet = new CWallet(walletFile);
         int nZapWalletRet = tempWallet->ZapWalletTx(vWtx);
         if (nZapWalletRet != DB_LOAD_OK) {
-            fprintf(stderr, _("Error loading %s: Wallet corrupted").c_str(), walletFile);
+            fprintf(stderr, _("Error loading %s: Wallet corrupted").c_str(), walletFile.c_str());
             return false;
         }
 
