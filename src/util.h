@@ -156,6 +156,12 @@ extern bool fLogTimestamps;
 extern bool fReopenDebugLog;
 extern bool fVerifyBlockHashOnLoad;
 
+extern long long nLastWalletStakeTime;
+extern unsigned long long nMinWeightInputs;
+extern unsigned long long nMaxWeightInputs;
+extern unsigned long long nWeightInputs;
+extern unsigned long long nTotalWeightInputs;
+
 void RandAddSeed();
 void RandAddSeedPerfmon();
 int ATTR_WARN_PRINTF(1,2) OutputDebugStringF(const char* pszFormat, ...);

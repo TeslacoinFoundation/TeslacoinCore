@@ -447,6 +447,18 @@ bool AppInit2()
             InitWarning(_("Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction."));
     }
 
+    //fConfChange = GetBoolArg("-confchange", false);
+	//fEnforceCanonical = GetBoolArg("-enforcecanonical", true);
+	
+	if (mapArgs.count("-mininput"))
+    {
+        if (!ParseMoney(mapArgs["-mininput"], nMinimumInputValue))
+            return InitError(strprintf(_("Invalid amount for -mininput=<amount>: '%s'"), mapArgs["-mininput"].c_str()));
+    }
+
+   // /* Controls proof-of-stake generation */
+   // fStakeGen = GetBoolArg("-stakegen", true);
+
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 
     std::string strDataDir = GetDataDir().string();

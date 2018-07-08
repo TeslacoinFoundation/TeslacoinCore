@@ -1020,8 +1020,31 @@ void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const
                 continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++)
-                 if (!(pcoin->IsSpent(i)) && IsMine(pcoin->vout[i]) && pcoin->vout[i].nValue > 0 &&
-                 (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i)))
+                if (!(pcoin->IsSpent(i)) && IsMine(pcoin->vout[i]) && pcoin->vout[i].nValue >= nMinimumInputValue &&
+                (!coinControl || !coinControl->HasSelected() || coinControl->IsSelected((*it).first, i)))
+                    vCoins.push_back(COutput(pcoin, i, pcoin->GetDepthInMainChain()));
+        }
+    }
+}
+
+void CWallet::AvailableCoinsMinConf(vector<COutput>& vCoins, int nConf) const
+{
+    vCoins.clear();
+
+    {
+        LOCK(cs_wallet);
+        for (map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it)
+        {
+            const CWalletTx* pcoin = &(*it).second;
+
+            if (!pcoin->IsFinal())
+                continue;
+
+            if(pcoin->GetDepthInMainChain() < nConf)
+                continue;
+
+            for (unsigned int i = 0; i < pcoin->vout.size(); i++)
+                if (!(pcoin->IsSpent(i)) && IsMine(pcoin->vout[i]) && pcoin->vout[i].nValue >= nMinimumInputValue)
                     vCoins.push_back(COutput(pcoin, i, pcoin->GetDepthInMainChain()));
         }
     }
@@ -1221,7 +1244,49 @@ bool CWallet::SelectCoins(int64 nTargetValue, unsigned int nSpendTime, set<pair<
 }
 
 
+// Select some coins without random shuffle or best subset approximation
+bool CWallet::SelectCoinsSimple(int64 nTargetValue, unsigned int nSpendTime, int nMinConf, set<pair<const CWalletTx*,unsigned int> >& setCoinsRet, int64& nValueRet) const
+{
+    vector<COutput> vCoins;
+    AvailableCoinsMinConf(vCoins, nMinConf);
 
+    setCoinsRet.clear();
+    nValueRet = 0;
+
+    BOOST_FOREACH(COutput output, vCoins)
+    {
+        const CWalletTx *pcoin = output.tx;
+        int i = output.i;
+
+        // Stop if we've chosen enough inputs
+        if (nValueRet >= nTargetValue)
+            break;
+
+        // Follow the timestamp rules
+        if (pcoin->nTime > nSpendTime)
+            continue;
+
+        int64 n = pcoin->vout[i].nValue;
+
+        pair<int64,pair<const CWalletTx*,unsigned int> > coin = make_pair(n,make_pair(pcoin, i));
+
+        if (n >= nTargetValue)
+        {
+            // If input value is greater or equal to target then simply insert
+            //    it into the current subset and exit
+            setCoinsRet.insert(coin.second);
+            nValueRet += coin.first;
+            break;
+        }
+        else if (n < nTargetValue + CENT)
+        {
+            setCoinsRet.insert(coin.second);
+            nValueRet += coin.first;
+        }
+    }
+
+    return true;
+}
 
 bool CWallet::CreateTransaction(const vector<pair<CScript, int64> >& vecSend, CWalletTx& wtxNew, CReserveKey& reservekey, int64& nFeeRet, const CCoinControl* coinControl)
 {
@@ -1374,6 +1439,89 @@ void CWallet::GetStakeWeightFromValue(const int64_t& nTime, const int64_t& nValu
 
     CBigNum bnCoinDayWeight = CBigNum(nValue) * nTimeWeight / COIN / (24 * 60 * 60);
     nWeight = bnCoinDayWeight.getuint64();
+}
+
+// CapitalCoin: get current stake weight
+bool CWallet::GetStakeWeight(const CKeyStore& keystore, uint64& nMinWeight, uint64& nMaxWeight, uint64& nWeight)
+{
+    // Choose coins to use
+    int64 nBalance = GetBalance();
+    int64 nReserveBalance = 0;
+
+    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
+    {
+        error("GetStakeWeight : invalid reserve balance amount");
+        return false;
+    }
+
+    if (nBalance <= nReserveBalance)
+        return false;
+
+    vector<const CWalletTx*> vwtxPrev;
+
+/*
+ * TODO: performance comparison
+
+    static set<pair<const CWalletTx*,unsigned int> > setCoins;
+    static uint256 hashPrevBlock;
+    static int64 nValueIn = 0;
+
+    // Cache outputs unless best block changed
+    if (hashPrevBlock != pindexBest->GetBlockHash())
+    {
+        if (!SelectCoinsSimple(nBalance - nReserveBalance, GetAdjustedTime(), nCoinbaseMaturity * 20, setCoins, nValueIn))
+            return false;
+
+        if (setCoins.empty())
+            return false;
+
+        hashPrevBlock == pindexBest->GetBlockHash();
+    }
+*/
+
+    set<pair<const CWalletTx*,unsigned int> > setCoins;
+    int64 nValueIn = 0;
+
+    if (!SelectCoinsSimple(nBalance - nReserveBalance, GetTime(), nCoinbaseMaturity * 20, setCoins, nValueIn))
+        return false;
+
+    if (setCoins.empty())
+        return false;
+
+    CTxDB txdb("r");
+    BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
+    {
+        CTxIndex txindex;
+        {
+            LOCK2(cs_main, cs_wallet);
+            if (!txdb.ReadTxIndex(pcoin.first->GetHash(), txindex))
+                continue;
+        }
+
+        int64 nTimeWeight = GetWeight((int64)pcoin.first->nTime, (int64)GetTime());
+        CBigNum bnCoinDayWeight = CBigNum(pcoin.first->vout[pcoin.second].nValue) * nTimeWeight / COIN / (24 * 60 * 60);
+
+        // Weight is greater than zero
+        if (nTimeWeight > 0)
+        {
+            nWeight += bnCoinDayWeight.getuint64();
+        }
+
+        // Weight is greater than zero, but the maximum value isn't reached yet
+        if (nTimeWeight > 0 && nTimeWeight < nStakeMaxAge)
+        {
+            nMinWeight += bnCoinDayWeight.getuint64();
+        }
+
+        // Maximum weight was reached
+        if (nTimeWeight == nStakeMaxAge)
+        {
+            nMaxWeight += bnCoinDayWeight.getuint64();
+			printf("TimeWeight of %"PRI64d"has reached StakeMaxAge of: %d, The Maximum weight of: %"PRI64d" was reached\n", nTimeWeight, nStakeMaxAge, nMaxWeight);
+        }
+    }
+
+    return true;
 }
 
 

@@ -29,7 +29,6 @@
 
 #include <stdlib.h>
 #include <stdint.h>
-#include <xmmintrin.h>
 
 #include "scrypt_mine.h"
 #include "pbkdf2.h"

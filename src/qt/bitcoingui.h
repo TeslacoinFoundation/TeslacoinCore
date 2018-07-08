@@ -1,6 +1,12 @@
 #ifndef BITCOINGUI_H
 #define BITCOINGUI_H
 
+extern long long nLastWalletStakeTime;
+extern unsigned long long nMinWeightInputs;
+extern unsigned long long nMaxWeightInputs;
+extern unsigned long long nWeightInputs;
+extern unsigned long long nTotalWeightInputs;
+
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 
