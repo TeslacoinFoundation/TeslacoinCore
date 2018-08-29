@@ -1156,15 +1156,15 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"nodo1-tesv34", "94.177.247.97"},
-    {"nodo2-tesv34", "89.40.119.28"},
-    {"nodo3-tesv34", "94.177.237.24"},
-    {"nodo4-tesv34", "86.105.48.207"},
-    {"nodo5-tesv34", "185.35.67.61"},
-    {"nodo6-tesv34", "89.40.127.224"},
-    {"nodo7-tesv34", "212.237.54.59"},
-    {"nodo8-tesv34", "212.237.62.182"},
-    {"nodo9-tesv34", "80.211.130.197"},
+    {"nodo1-tesv41", "94.177.247.97"},
+    {"nodo2-tesv41", "89.40.119.28"},
+    {"nodo3-tesv41", "94.177.237.24"},
+    {"nodo4-tesv41", "86.105.48.207"},
+    {"nodo5-tesv41", "185.35.67.61"},
+    {"nodo6-tesv41", "89.40.127.224"},
+    {"nodo7-tesv41", "212.237.54.59"},
+    {"nodo8-tesv41", "212.237.62.182"},
+    {"nodo9-tesv41", "80.211.130.197"},
 
 };
 
