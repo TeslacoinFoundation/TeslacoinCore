@@ -1210,8 +1210,6 @@ static const char *strDNSSeed[][2] = {
     {"nodo53-tesv41", "93.82.76.180"},
     {"nodo54-tesv41", "93.87.184.146"},
     {"nodo55-tesv41", "93.87.253.89"},
-
-
 };
 
 void ThreadDNSAddressSeed(void* parg)
