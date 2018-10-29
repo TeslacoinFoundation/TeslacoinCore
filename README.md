@@ -33,7 +33,7 @@ sudo apt-get install libqt4-dev libqrencode-dev libprotobuf-dev protobuf-compile
 sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:bitcoin/bitcoin
 sudo apt-get update
-git clone https://github.com/TeslacoinFoundation/Teslacoin-v.4.0.git
+git clone https://github.com/TeslacoinFoundation/TeslacoinCore.git
 sudo chmod 777 Teslacoin
 ```
 
