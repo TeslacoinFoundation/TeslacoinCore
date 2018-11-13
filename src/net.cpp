@@ -831,11 +831,7 @@ void ThreadSocketHandler2(void* parg)
             }
             else if (nInbound >= GetArg("-maxconnections", 125) - MAX_OUTBOUND_CONNECTIONS)
             {
-                {
-                    LOCK(cs_setservAddNodeAddresses);
-                    if (!setservAddNodeAddresses.count(addr))
-                        closesocket(hSocket);
-                }
+                closesocket(hSocket);
             }
             else if (CNode::IsBanned(addr))
             {
@@ -1156,59 +1152,12 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"nodo2-tesv41", "89.40.119.28"},
-    {"nodo3-tesv41", "104.174.129.33"},
-    {"nodo4-tesv41", "106.72.33.64"},
-    {"nodo5-tesv41", "108.170.1.134"},
-    {"nodo6-tesv41", "109.123.102.46"},
-    {"nodo7-tesv41", "109.255.229.87"},
-    {"nodo8-tesv41", "136.33.38.61"},
-    {"nodo9-tesv41", "172.77.125.225"},
-    {"nodo10-tesv41", "172.77.130.220"},
-    {"nodo11-tesv41", "172.77.131.146"},
-    {"nodo12-tesv41", "80.211.219.101"},
-    {"nodo13-tesv41", "174.87.126.104"},
-    {"nodo14-tesv41", "176.51.232.220"},
-    {"nodo15-tesv41", "178.17.16.79"},
-    {"nodo16-tesv41", "185.35.67.61"},
-    {"nodo17-tesv41", "187.36.134.241"},
-    {"nodo18-tesv41", "195.222.56.65"},
-    {"nodo19-tesv41", "195.29.192.157"},
-    {"nodo20-tesv41", "201.240.147.249"},
-    {"nodo21-tesv41", "202.179.26.241"},
-    {"nodo22-tesv41", "212.237.62.182"},
-    {"nodo23-tesv41", "213.233.216.158"},
-    {"nodo24-tesv41", "217.175.119.125"},
-    {"nodo25-tesv41", "220.143.54.209"},
-    {"nodo26-tesv41", "223.74.218.28"},
-    {"nodo27-tesv41", "31.135.26.29"},
-    {"nodo28-tesv41", "37.170.201.83"},
-    {"nodo29-tesv41", "37.173.96.163"},
-    {"nodo30-tesv41", "37.47.1.31"},
-    {"nodo31-tesv41", "47.144.213.150"},
-    {"nodo32-tesv41", "47.222.173.70"},
-    {"nodo33-tesv41", "5.86.217.113"},
-    {"nodo34-tesv41", "67.185.102.187"},
-    {"nodo35-tesv41", "71.76.176.17"},
-    {"nodo36-tesv41", "77.46.174.35"},
-    {"nodo37-tesv41", "77.56.58.236"},
-    {"nodo38-tesv41", "80.108.3.150"},
-    {"nodo40-tesv41", "81.24.242.184"},
-    {"nodo41-tesv41", "84.2.34.93"},
-    {"nodo42-tesv41", "85.165.92.28"},
-    {"nodo43-tesv41", "85.23.235.15"},
-    {"nodo44-tesv41", "86.105.48.207"},
-    {"nodo45-tesv41", "86.83.98.209"},
-    {"nodo46-tesv41", "87.66.185.187"},
-    {"nodo47-tesv41", "88.198.61.50"},
-    {"nodo48-tesv41", "89.40.119.28"},
-    {"nodo49-tesv41", "89.40.127.224"},
-    {"nodo50-tesv41", "91.113.4.94"},
-    {"nodo51-tesv41", "91.113.78.3"},
-    {"nodo52-tesv41", "92.110.47.124"},
-    {"nodo53-tesv41", "93.82.76.180"},
-    {"nodo54-tesv41", "93.87.184.146"},
-    {"nodo55-tesv41", "93.87.253.89"},
+    {"nodo2-tesv41", "89.40.127.224"},
+    {"nodo3-tesv41", "176.107.131.253"},
+    {"nodo4-tesv41", "80.211.216.67"},
+    {"nodo5-tesv41", "80.211.23.140"},
+    {"nodo6-tesv41", "94.130.220.2"},
+    {"nodo7-tesv41", "89.40.119.28"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1804,6 +1753,7 @@ bool BindListenPort(const CService &addrBind, string& strError)
         else
             strError = strprintf(_("Unable to bind to %s on this computer (bind returned error %d, %s)"), addrBind.ToString().c_str(), nErr, strerror(nErr));
         printf("%s\n", strError.c_str());
+        CloseSocket(hListenSocket);
         return false;
     }
     printf("Bound to %s\n", addrBind.ToString().c_str());
@@ -1813,6 +1763,7 @@ bool BindListenPort(const CService &addrBind, string& strError)
     {
         strError = strprintf("Error: Listening for incoming connections failed (listen returned error %d)", WSAGetLastError());
         printf("%s\n", strError.c_str());
+        CloseSocket(hListenSocket);
         return false;
     }
 

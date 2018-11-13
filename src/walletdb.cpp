@@ -6,10 +6,10 @@
 #include "walletdb.h"
 #include "wallet.h"
 #include <boost/filesystem.hpp>
+#include <boost/scoped_ptr.hpp>
 
-using namespace std;
 using namespace boost;
-
+using namespace std;
 
 static uint64 nAccountingEntryNumber = 0;
 extern bool fWalletUnlockMintOnly;
@@ -698,7 +698,7 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     printf("Salvage(aggressive) found %" PRIszu " records\n", salvagedData.size());
 
     bool fSuccess = allOK;
-    Db* pdbCopy = new Db(&dbenv.dbenv, 0);
+    boost::scoped_ptr<Db> pdbCopy(new Db(&dbenv.dbenv, 0));
     int ret = pdbCopy->open(NULL,                 // Txn pointer
                             filename.c_str(),   // Filename
                             "main",    // Logical db name
@@ -744,7 +744,6 @@ bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
     }
     ptxn->commit(0);
     pdbCopy->close(0);
-    delete pdbCopy;
 
     return fSuccess;
 }
