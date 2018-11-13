@@ -124,6 +124,12 @@ public:
         nCoinDaysTried = 0;
     }
 
+    ~CWallet()
+    {
+        delete pwalletdbEncryption;
+        pwalletdbEncryption = NULL;
+    }
+
     std::map<uint256, CWalletTx> mapWallet;
     int64 nOrderPosNext;
     std::map<uint256, int> mapRequestCount;

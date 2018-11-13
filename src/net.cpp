@@ -25,7 +25,7 @@
 using namespace std;
 using namespace boost;
 
-static const int MAX_OUTBOUND_CONNECTIONS = 8;
+static const int MAX_OUTBOUND_CONNECTIONS = 16;
 
 void ThreadMessageHandler2(void* parg);
 void ThreadSocketHandler2(void* parg);
@@ -831,11 +831,7 @@ void ThreadSocketHandler2(void* parg)
             }
             else if (nInbound >= GetArg("-maxconnections", 125) - MAX_OUTBOUND_CONNECTIONS)
             {
-                {
-                    LOCK(cs_setservAddNodeAddresses);
-                    if (!setservAddNodeAddresses.count(addr))
-                        closesocket(hSocket);
-                }
+                closesocket(hSocket);
             }
             else if (CNode::IsBanned(addr))
             {
@@ -1156,16 +1152,12 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"nodo1-tesv34", "94.177.247.97"},
-    {"nodo2-tesv34", "89.40.119.28"},
-    {"nodo3-tesv34", "94.177.237.24"},
-    {"nodo4-tesv34", "86.105.48.207"},
-    {"nodo5-tesv34", "185.35.67.61"},
-    {"nodo6-tesv34", "89.40.127.224"},
-    {"nodo7-tesv34", "212.237.54.59"},
-    {"nodo8-tesv34", "212.237.62.182"},
-    {"nodo9-tesv34", "80.211.130.197"},
-
+    {"nodo2-tesv41", "89.40.127.224"},
+    {"nodo3-tesv41", "176.107.131.253"},
+    {"nodo4-tesv41", "80.211.216.67"},
+    {"nodo5-tesv41", "80.211.23.140"},
+    {"nodo6-tesv41", "94.130.220.2"},
+    {"nodo7-tesv41", "89.40.119.28"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1761,6 +1753,7 @@ bool BindListenPort(const CService &addrBind, string& strError)
         else
             strError = strprintf(_("Unable to bind to %s on this computer (bind returned error %d, %s)"), addrBind.ToString().c_str(), nErr, strerror(nErr));
         printf("%s\n", strError.c_str());
+        CloseSocket(hListenSocket);
         return false;
     }
     printf("Bound to %s\n", addrBind.ToString().c_str());
@@ -1770,6 +1763,7 @@ bool BindListenPort(const CService &addrBind, string& strError)
     {
         strError = strprintf("Error: Listening for incoming connections failed (listen returned error %d)", WSAGetLastError());
         printf("%s\n", strError.c_str());
+        CloseSocket(hListenSocket);
         return false;
     }
 
